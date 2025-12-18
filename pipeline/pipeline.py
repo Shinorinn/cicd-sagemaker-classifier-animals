@@ -1,5 +1,4 @@
 import sagemaker
-from sagemaker.tensorflow import TensorFlow, TensorFlowProcessor
 from sagemaker.workflow.pipeline_context import PipelineSession
 from sagemaker.workflow.steps import TrainingStep, ProcessingStep, CacheConfig
 from sagemaker.workflow.condition_step import ConditionStep
@@ -13,6 +12,8 @@ from sagemaker.model import Model
 from sagemaker.processing import ProcessingInput, ProcessingOutput
 from sagemaker.workflow.functions import Join
 import os
+from sagemaker.tensorflow import TensorFlow
+from sagemaker.processing import TensorFlowProcessor
 # --- 1. THIẾT LẬP CHUNG ---
 pipeline_session = PipelineSession()
 role = 'arn:aws:iam::339713121931:role/service-role/AmazonSageMaker-ExecutionRole-20251217T201397'

@@ -1,36 +1,11 @@
-version: 0.2
-
 phases:
   install:
     runtime-versions:
       python: 3.11
     commands:
-      - echo "Installing dependencies from requirements.txt..."
+      - echo "Installing dependencies directly..."
       - pip install --upgrade pip
-      # Lệnh này sẽ cài đặt tất cả thư viện có trong file requirements.txt
-      - pip install -r requirements.txt
-
-  pre_build:
-    commands:
-      - echo "Checking environment and files..."
-      # Kiểm tra xem file pipeline.py có tồn tại không trước khi chạy
-      - ls -R
-      # Bạn có thể thêm lệnh kiểm tra lỗi code (linting) ở đây nếu muốn
-      # - flake8 pipelines/pipeline.py
-
-  build:
-    commands:
-      - echo "Upserting SageMaker Pipeline..."
-      # Chạy file python định nghĩa pipeline. 
-      # File này sẽ chứa lệnh pipeline.upsert() để đẩy bản vẽ lên AWS.
-      - python pipeline/pipeline.py
-
-  post_build:
-    commands:
-      - echo "Build completed on `date`"
-      - echo "Pipeline has been updated. Check SageMaker Studio to see the new version."
-
-artifacts:
-  files:
-    # Lưu lại file cấu hình hoặc kết quả kiểm tra nếu cần
-    - '**/*'
+      # Cài đặt trực tiếp để chắc chắn không bị sót
+      - pip install sagemaker tensorflow-cpu boto3
+      # Thêm lệnh này để kiểm tra xem tensorflow đã có trong máy chưa
+      - pip show tensorflow-cpu
