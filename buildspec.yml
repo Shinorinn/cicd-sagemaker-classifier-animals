@@ -8,7 +8,7 @@ phases:
       - echo "Installing dependencies..."
       # Cài đặt SageMaker SDK và các thư viện cần thiết để chạy file pipeline.py
       - pip install --upgrade pip
-      - pip install sagemaker boto3
+      - pip install sagemaker boto3 -q
 
   pre_build:
     commands:
@@ -23,7 +23,7 @@ phases:
       - echo "Upserting SageMaker Pipeline..."
       # Chạy file python định nghĩa pipeline. 
       # File này sẽ chứa lệnh pipeline.upsert() để đẩy bản vẽ lên AWS.
-      - python pipelines/pipeline.py
+      - python pipeline/pipeline.py
 
   post_build:
     commands:
