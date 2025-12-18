@@ -12,7 +12,7 @@ from sagemaker.workflow.parameters import ParameterString, ParameterBoolean
 from sagemaker.model import Model
 from sagemaker.processing import ProcessingInput, ProcessingOutput
 from sagemaker.workflow.functions import Join
-
+import os
 # --- 1. THIẾT LẬP CHUNG ---
 pipeline_session = PipelineSession()
 role = 'arn:aws:iam::339713121931:role/service-role/AmazonSageMaker-ExecutionRole-20251217T201397'
@@ -251,41 +251,10 @@ pipeline = Pipeline(
     steps=[step_main_condition],
     sagemaker_session=pipeline_session
 )
-
-# Tạo/update pipeline
-print("Creating/Updating pipeline...")
-pipeline.upsert(role_arn=role)
-print(f"✅ Pipeline '{pipeline.name}' created/updated successfully!")
-
-print("\n" + "="*70)
-print("📋 CÁCH CHẠY PIPELINE")
-print("="*70)
-
-print("\n🔹 CÁCH 1: TRAIN MODEL MỚI (mặc định)")
-print("    execution = pipeline.start()")
-print("    Flow: Training → Evaluation → Register (if accuracy ≥ 80%)")
-
-print("\n🔹 CÁCH 2: SKIP TRAINING - DÙNG MODEL CÓ SẴN")
-print("    execution = pipeline.start(")
-print("        parameters={")
-print("            'SkipTraining': True,")
-print("            'PretrainedModelPath': 's3://your-bucket/.../model.tar.gz'")
-print("        }")
-print("    )")
-print("    Flow: Evaluation Pretrained → Register (if accuracy ≥ 80%)")
-
-print("\n🔹 CÁCH 3: CACHE TỰ ĐỘNG (30 ngày)")
-print("    Nếu chạy lại với cùng data/hyperparameters → tự động skip training")
-
-print("\n" + "="*70)
-print(f"\n🌐 Monitor pipeline tại:")
-print(f"https://{region}.console.aws.amazon.com/sagemaker/home?region={region}#/pipelines")
-
-# Uncomment để chạy:
-execution = pipeline.start()
-# execution = pipeline.start(
-#         parameters={
-#             'SkipTraining': True,
-#             'PretrainedModelPath': 's3://cat-dog-classification-bucket/data/raw/output/models/tensorflow-training-2025-12-17-21-04-15/output/model.tar.gz'
-#         }
-#     )
+role_arn = os.environ.get("SAGEMAKER_PIPELINE_ROLE_ARN")
+print("Cập nhật bản thiết kế Pipeline lên SageMaker...")
+pipeline.upsert(role_arn=role_arn)
+definition = pipeline.definition()
+with open("pipeline_definition.json", "w") as f:
+    f.write(definition)
+print("Hoàn tất! Pipeline đã được cập nhật thành công.")
