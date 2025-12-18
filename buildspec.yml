@@ -5,9 +5,25 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
-      - echo "Installing dependencies directly..."
+      - echo "Installing dependencies..."
       - pip install --upgrade pip
-      # Cài đặt trực tiếp để chắc chắn không bị sót
-      - pip install sagemaker tensorflow-cpu boto3
-      # Thêm lệnh này để kiểm tra xem tensorflow đã có trong máy chưa
-      - pip show tensorflow-cpu
+      - pip install -r requirements.txt
+
+  pre_build:
+    commands:
+      - echo "Checking environment and files..."
+      - ls -R
+
+  build:
+    commands:
+      - echo "Upserting SageMaker Pipeline..."
+      # Đảm bảo đường dẫn này khớp với cấu trúc folder trên GitHub của bạn
+      - python pipeline/pipeline.py
+
+  post_build:
+    commands:
+      - echo "Build completed on `date`"
+
+artifacts:
+  files:
+    - '**/*'
