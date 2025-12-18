@@ -5,10 +5,10 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
-      - echo "Installing dependencies..."
-      # Cài đặt SageMaker SDK và các thư viện cần thiết để chạy file pipeline.py
+      - echo "Installing dependencies from requirements.txt..."
       - pip install --upgrade pip
-      - pip install sagemaker boto3 -q
+      # Lệnh này sẽ cài đặt tất cả thư viện có trong file requirements.txt
+      - pip install -r requirements.txt
 
   pre_build:
     commands:
