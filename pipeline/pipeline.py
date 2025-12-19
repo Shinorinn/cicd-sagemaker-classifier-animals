@@ -38,7 +38,10 @@ estimator = TensorFlow(
     entry_point='./training/train.py',
     role=role,
     instance_count=1,
-    instance_type='ml.m5.xlarge',
+    instance_type='ml.m5.large',
+    use_spot_instances=True,       # Bật chế độ giá rẻ
+    max_wait=3600,                 # Thời gian chờ tối đa (bắt buộc khi dùng spot)
+    max_run=3600,                   # Thời gian chạy tối đa
     framework_version='2.13',
     py_version='py310',
     sagemaker_session=pipeline_session,
@@ -283,7 +286,7 @@ print(f"\n🌐 Monitor pipeline tại:")
 print(f"https://{region}.console.aws.amazon.com/sagemaker/home?region={region}#/pipelines")
 
 # Uncomment để chạy:
-execution = pipeline.start()
+# execution = pipeline.start()
 # execution = pipeline.start(
 #         parameters={
 #             'SkipTraining': True,
